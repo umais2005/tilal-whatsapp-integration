@@ -123,39 +123,40 @@ app.post('/webhook', async (req, res) => {
             })
           })
         }
-      } else {
-const interactive = req.body.entry[0].changes[0].value.messages[0].interactive;
-
-if (interactive?.button_reply?.id?.includes('path-')) {
-  await interact(
-    user_id,
-    {
-      type: interactive.button_reply.id,
-      payload: {
-        label: interactive.button_reply.title,
-      },
-    },
-    phone_number_id,
-    user_name
-  );
-} else if (interactive?.button_reply) {
-  await interact(
-    user_id,
-    {
-      type: 'intent',
-      payload: {
-        query: interactive.button_reply.title,
-        intent: {
-          name: interactive.button_reply.id,
-        },
-        entities: [],
-      },
-    },
-    phone_number_id,
-    user_name
-  );
 } else {
-  console.log('Unsupported interactive format or missing button_reply');
+  const interactive = req.body.entry[0].changes[0].value.messages[0].interactive;
+
+  if (interactive?.button_reply?.id?.includes('path-')) {
+    await interact(
+      user_id,
+      {
+        type: interactive.button_reply.id,
+        payload: {
+          label: interactive.button_reply.title,
+        },
+      },
+      phone_number_id,
+      user_name
+    );
+  } else if (interactive?.button_reply) {
+    await interact(
+      user_id,
+      {
+        type: 'intent',
+        payload: {
+          query: interactive.button_reply.title,
+          intent: {
+            name: interactive.button_reply.id,
+          },
+          entities: [],
+        },
+      },
+      phone_number_id,
+      user_name
+    );
+  } else {
+    console.log('Unsupported interactive format or missing button_reply');
+  }
 }
  {
           await interact(
