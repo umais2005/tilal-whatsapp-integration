@@ -124,44 +124,46 @@ app.post('/webhook', async (req, res) => {
           })
         }
       } else {
-        const message = req.body?.entry?.[0]?.changes?.[0]?.value?.messages?.[0];
-      
-        const buttonReply = message?.interactive?.button_reply;
-      
-        if (buttonReply?.id?.includes('path-')) {
+        if (
+          req.body.entry[0].changes[0].value.messages[0].interactive.button_reply.id.includes(
+            'path-'
+          )
+        ) {
           await interact(
             user_id,
             {
-              type: buttonReply.id,
+              type: req.body.entry[0].changes[0].value.messages[0].interactive
+                .button_reply.id,
               payload: {
-                label: buttonReply.title,
+                label:
+                  req.body.entry[0].changes[0].value.messages[0].interactive
+                    .button_reply.title,
               },
             },
             phone_number_id,
             user_name
-          );
-        } else if (buttonReply) {
+          )
+        } else {
           await interact(
             user_id,
             {
               type: 'intent',
               payload: {
-                query: buttonReply.title,
+                query:
+                  req.body.entry[0].changes[0].value.messages[0].interactive
+                    .button_reply.title,
                 intent: {
-                  name: buttonReply.id,
+                  name: req.body.entry[0].changes[0].value.messages[0]
+                    .interactive.button_reply.id,
                 },
                 entities: [],
               },
             },
             phone_number_id,
             user_name
-          );
-        } else {
-          console.warn('No button_reply found in message:', JSON.stringify(message, null, 2));
-          // Optional: Send a fallback response or ignore silently
+          )
         }
       }
-      
     }
     res.status(200).json({ message: 'ok' })
   } else {
