@@ -41,7 +41,7 @@ app.listen(process.env.PORT || 3000, () => console.log('webhook is listening'))
 app.get('/', (req, res) => {
   res.json({
     success: true,
-    info: 'WhatsApp API v1.1.2 | V⦿iceflow | 2023',
+    info: 'WhatsApp Umais API v1.1.2 | V⦿iceflow | 2023',
     status: 'healthy',
     error: null,
   })
